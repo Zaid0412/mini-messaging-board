@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <h1>Mini Messaging App</h1>
+            <button class="change-name-btn" onclick="document.querySelector('.change-name-dialog').showModal()">Change Name</button>
+        </div>
+        <div class="messages">
+            <% messages.map((msg) => { %>
+                <div class="msg">
+                    <h3><%= msg.user %></h3>
+                    <div class="msg-text"><%= msg.text %></div>
+                    <p class="msg-time"><%= msg.time %></p>
+                </div>
+                <% }) %>
+        </div>
+        <dialog class="change-name-dialog">
+            <form method="POST" action="/username" class="change-name-form">
+                <input type="text" class="name-input" name="newUsername" value="<%= userName %>">
+                <button>Change Name</button>
+            </form>
+        </dialog>
+        <div class="input">
+            <form method="POST" action="/new">
+                <input type="text" name="messageText" autofocus>
+                <button class="send-btn" ><img src="send-icon.png" alt=""></button>
+            </form>
+        </div>
+    </div>
+    <script>
+    </script>
+</body>
+</html>
