@@ -10,8 +10,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
-    "fancy-random-names": "^1.0.4"
+    "fancy-random-names": "^1.0.4",
+    "pg": "^8.13.1"
   }
 }
