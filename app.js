@@ -1,4 +1,6 @@
 const { getRandomName, getNRandomNames, names } = require('fancy-random-names');
+const msgControllers = require('./controllers/msgControllers')
+const db = require('./db/queries')
 const express = require('express')
 const path = require("node:path");
 const app = express()
@@ -11,21 +13,6 @@ const getTime = (date) => {
   const [_, AmPm] = secs.split(' ')
   return `${time[0]} ,${hour}:${mins} ${AmPm}`
 }
-const messages = [
-    {
-      text: "Hi there!",
-      user: "Amando",
-      added: new Date(),
-      time: getTime(new Date)
-    },
-    {
-      text: "Hello World!",
-      user: "Charles",
-      added: new Date(),
-      time: getTime(new Date)
-    }
-];
-
 // const changeNameBtn = document.querySelector('.change-name-btn')
 // const changeNameDialog = document.querySelector('.change-name-dialog')
 
@@ -38,17 +25,29 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-    res.render("index", {messages, userName});
+app.get("/", (req, res) => { 
+    msgControllers.getMsgs().then(msgs => {
+      const messages = []
+      msgs.map(msg => {
+        messages.push({
+          text: msg.text,
+          user: msg.username,
+          added: msg.added,
+          time: getTime(msg.added)
+        })
+      })
+      console.log(messages)
+      res.render("index", {messages, userName});
+    })
 });
 
 app.post('/new', (req, res) => {
   if (req.body.messageText) { 
-    messages.push({ text: req.body.messageText, user: userName, added: new Date(), time: getTime(new Date())});
-    console.log(messages)
+    db.insertMsg(req.body.messageText, userName, new Date())
     res.redirect('/')
   }
 })
+
 
 app.post('/username', (req, res) => {
   console.log(req.body)
